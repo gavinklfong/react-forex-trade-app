@@ -2,20 +2,48 @@ import React, { ComponentProps } from "react";
 
 import { Story } from "@storybook/react";
 
-import RatesTable from "./RatesTable";
+import ForexRatesTable from "./ForexRatesTable";
+import { ForexRate } from "../models/ForexRate";
+import { Box, Grommet } from "grommet";
+import { grommet } from "grommet/themes";
 
-//👇 This default export determines where your story goes in the story list
-export default {
-  title: "RatesTable",
-  component: RatesTable,
-};
+const DATA: ForexRate[] = [
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "USD",
+    buyRate: 1.7,
+    sellRate: 1.6,
+    spread: 0.1,
+  },
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "CAD",
+    buyRate: 1.02,
+    sellRate: 1.03,
+    spread: 0.01,
+  },
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "HKD",
+    buyRate: 10.7,
+    sellRate: 10.6,
+    spread: 0.1,
+  },
+];
 
-//👇 We create a “template” of how args map to rendering
-const Template: Story<ComponentProps<typeof RatesTable>> = (args) => (
-  <RatesTable {...args} />
+export const Default = () => (
+  <Grommet theme={grommet}>
+    <Box align="center" pad="large">
+      <ForexRatesTable rates={DATA} />
+    </Box>
+  </Grommet>
 );
 
-export const FirstStory = Template.bind({});
-FirstStory.args = {
-  /*👇 The args you need here will depend on your component */
+// This default export determines where your story goes in the story list
+export default {
+  title: "RatesTable",
+  component: ForexRatesTable,
 };
