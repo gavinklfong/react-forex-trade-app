@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-// import logo from './logo.svg';
-// import './App.css';
 import {
   Box,
   Button,
@@ -11,6 +9,10 @@ import {
   ResponsiveContext,
 } from "grommet";
 import { Notification, FormClose } from "grommet-icons";
+
+import { Router, Route, Switch } from "react-router-dom";
+
+import Rates from "./screens/Rates";
 
 const AppBar = (props: any) => (
   <Box
@@ -57,45 +59,9 @@ function App() {
               />
             </AppBar>
             <Box direction="row" flex overflow={{ horizontal: "hidden" }}>
-              <Box flex align="center" justify="center">
-                app body
-              </Box>
-              {!showSidebar || size !== "small" ? (
-                <Collapsible direction="horizontal" open={showSidebar}>
-                  <Box
-                    width="medium"
-                    background="light-2"
-                    elevation="small"
-                    align="center"
-                    justify="center"
-                  >
-                    sidebar
-                  </Box>
-                </Collapsible>
-              ) : (
-                <Layer>
-                  <Box
-                    background="light-2"
-                    tag="header"
-                    align="center"
-                    justify="end"
-                    direction="row"
-                  >
-                    <Button
-                      icon={<FormClose />}
-                      onClick={() => setShowSidebar(false)}
-                    />
-                  </Box>
-                  <Box
-                    fill
-                    background="light-2"
-                    align="center"
-                    justify="center"
-                  >
-                    sidebar
-                  </Box>
-                </Layer>
-              )}
+              <Switch>
+                <Route exact={true} path="/" component={Rates} />
+              </Switch>
             </Box>
           </Box>
         )}
