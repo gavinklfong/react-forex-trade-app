@@ -23,6 +23,7 @@ const createTableColumnDef = (history: any) => {
     {
       property: "currencyPair",
       sortable: true,
+      align: "center",
       header: (
         <Heading size="medium" level="3">
           Instrument
@@ -34,8 +35,9 @@ const createTableColumnDef = (history: any) => {
     {
       property: "buyRate",
       size: "large",
+      align: "center",
       header: (
-        <Heading textAlign="center" size="medium" level="3">
+        <Heading size="medium" level="3">
           Buy Rate
         </Heading>
       ),
@@ -64,8 +66,9 @@ const createTableColumnDef = (history: any) => {
     {
       property: "sellRate",
       size: "large",
+      align: "center",
       header: (
-        <Heading alignSelf="center" textAlign="center" size="medium" level="3">
+        <Heading size="medium" level="3">
           Sell Rate
         </Heading>
       ),
@@ -93,8 +96,9 @@ const createTableColumnDef = (history: any) => {
     },
     {
       property: "spread",
+      align: "center",
       header: (
-        <Heading textAlign="center" size="medium" level="3">
+        <Heading size="medium" level="3">
           Spread
         </Heading>
       ),
