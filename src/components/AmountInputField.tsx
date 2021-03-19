@@ -1,14 +1,15 @@
-import { Box, Button, TextInput } from "grommet";
+import { Box, Button, TextInput, Grid, Text } from "grommet";
+import { Add, Subtract } from "grommet-icons";
 import React from "react";
 
 const AmountInputField = (props: any) => (
-  <React.Fragment>
-    <Box direction="row">
+  <Box direction="row" gap="xsmall">
+    <Box>
       <TextInput name="AmountInput" />
-      <Button>+</Button>
-      <Button>-</Button>
     </Box>
-  </React.Fragment>
+    <Button primary icon={<Add />}></Button>
+    <Button primary icon={<Subtract />}></Button>
+  </Box>
 );
 
 export default AmountInputField;

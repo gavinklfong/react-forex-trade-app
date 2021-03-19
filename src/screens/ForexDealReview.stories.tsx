@@ -5,18 +5,18 @@ import { Story } from "@storybook/react";
 import { Box, Grommet } from "grommet";
 import { grommet } from "grommet/themes";
 import { deepMerge } from "grommet/utils";
-import ForexDealInput from "./ForexDealInput";
+import ForexDealReview from "./ForexDealReview";
 
 export const Default = () => (
   <Grommet theme={grommet}>
     <Box align="center" pad="large">
-      <ForexDealInput />
+      <ForexDealReview />
     </Box>
   </Grommet>
 );
 
 // This default export determines where your story goes in the story list
 export default {
-  title: "ForexDealInput",
-  component: ForexDealInput,
+  title: "ForexDealReview",
+  component: ForexDealReview,
 };
