@@ -2,7 +2,8 @@ export interface ForexDeal {
   timestamp: Date;
   baseCurrency: string;
   counterCurrency: string;
-  dealType: string;
+  dealType: "buy" | "sell";
   rate: number;
-  amount: number;
+  baseCurrencyAmount: number;
+  counterCurrencyAmount: number;
 }

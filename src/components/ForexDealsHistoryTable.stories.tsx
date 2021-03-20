@@ -3,50 +3,44 @@ import React, { ComponentProps } from "react";
 import { Story } from "@storybook/react";
 
 import ForexDealsHistoryTable from "./ForexDealsHistoryTable";
-import { ForexRate } from "../models/ForexRate";
+import { ForexDeal } from "../models/ForexDeal";
 import { Box, Grommet } from "grommet";
 import { grommet } from "grommet/themes";
 
-const DATA: ForexRate[] = [
+const DATA: ForexDeal[] = [
   {
     timestamp: new Date(),
     baseCurrency: "GBP",
     counterCurrency: "USD",
-    buyRate: 1.7,
-    sellRate: 1.6,
-    spread: 0.1,
+    rate: 1.7,
+    dealType: "buy",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 170,
   },
   {
     timestamp: new Date(),
     baseCurrency: "GBP",
     counterCurrency: "CAD",
-    buyRate: 1.02,
-    sellRate: 1.03,
-    spread: 0.01,
+    rate: 1.02,
+    dealType: "buy",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 102,
   },
   {
     timestamp: new Date(),
     baseCurrency: "GBP",
     counterCurrency: "HKD",
-    buyRate: 10.7,
-    sellRate: 10.6,
-    spread: 0.1,
+    rate: 10.7,
+    dealType: "buy",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 1070,
   },
 ];
-
-const createDeal = (baseCurrency: string, counterCurrency: string) => {
-  console.log(
-    "create deal - base currency = " +
-      baseCurrency +
-      ", counter currency = " +
-      counterCurrency
-  );
-};
 
 export const Default = () => (
   <Grommet theme={grommet}>
     <Box align="center" pad="large">
-      <ForexDealsHistoryTable rates={DATA} />
+      <ForexDealsHistoryTable records={DATA} />
     </Box>
   </Grommet>
 );

@@ -9,3 +9,7 @@ export const useRates = (baseCurrency: string) => {
 
   return forexService.fetchRates(baseCurrency);
 };
+
+export const useDeals = (startDate: Date, endDate: Date) => {
+  return forexService.fetchDeals(startDate, endDate);
+};

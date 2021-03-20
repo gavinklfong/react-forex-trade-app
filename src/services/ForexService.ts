@@ -1,3 +1,4 @@
+import { ForexDeal } from "../models/ForexDeal";
 import { ForexRate } from "../models/ForexRate";
 
 const FOREX_RATES: ForexRate[] = [
@@ -115,8 +116,42 @@ const FOREX_RATES: ForexRate[] = [
   },
 ];
 
+const FOREX_DEALS: ForexDeal[] = [
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "USD",
+    rate: 1.7,
+    dealType: "buy",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 170,
+  },
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "CAD",
+    rate: 1.02,
+    dealType: "buy",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 102,
+  },
+  {
+    timestamp: new Date(),
+    baseCurrency: "GBP",
+    counterCurrency: "HKD",
+    rate: 10.7,
+    dealType: "sell",
+    baseCurrencyAmount: 100,
+    counterCurrencyAmount: 1070,
+  },
+];
+
 export class ForexService {
   fetchRates(baseCurrency: string): ForexRate[] {
     return FOREX_RATES;
+  }
+
+  fetchDeals(startDate: Date, endDate: Date = new Date()): ForexDeal[] {
+    return FOREX_DEALS;
   }
 }

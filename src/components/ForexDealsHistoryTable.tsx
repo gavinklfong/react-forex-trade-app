@@ -3,21 +3,29 @@ import React, { useState } from "react";
 import { Box, Button, DataTable, Text, Heading } from "grommet";
 import { ColumnConfig } from "grommet/components/DataTable";
 
-import { ForexRate } from "../models/ForexRate";
+import { ForexDeal } from "../models/ForexDeal";
 import { useHistory } from "react-router";
 
 export interface Props {
-  rates: ForexRate[];
+  records: ForexDeal[];
   // createDeal: (baseCurrency: string, counterCurrency: string) => void;
 }
 
 interface RowType {
   timestamp: Date;
   currencyPair: string;
+  baseCurrency: string;
+  counterCurrency: string;
   rate: number;
+  dealType: string;
   baseCurrencyAmount: number;
   counterCurrencyAmount: number;
 }
+
+const dateFormatter = Intl.DateTimeFormat("default", {
+  dateStyle: "medium",
+  timeStyle: "medium",
+});
 
 const createTableColumnDef = () => {
   const columns: ColumnConfig<RowType>[] = [
@@ -25,37 +33,64 @@ const createTableColumnDef = () => {
       property: "timestamp",
       sortable: true,
       align: "start",
+      size: "xlarge",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Timestamp
-        </Heading>
+        </Text>
       ),
       primary: true,
-      render: (datnum) => <Text size="xlarge">{datnum.timestamp}</Text>,
+      render: (datnum) => (
+        <Text size="medium">{dateFormatter.format(datnum.timestamp)}</Text>
+      ),
     },
     {
       property: "currencyPair",
       sortable: true,
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Instrument
-        </Heading>
+        </Text>
       ),
-      render: (datnum) => <Text size="xlarge">{datnum.currencyPair}</Text>,
+      render: (datnum) => <Text size="medium">{datnum.currencyPair}</Text>,
     },
     {
       property: "rate",
-      size: "large",
+      size: "medium",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Rate
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.rate}</Text>
+          <Text size="medium">{datnum.rate.toFixed(4)}</Text>
+        </Box>
+      ),
+    },
+    {
+      property: "dealType",
+      size: "xsmall",
+      align: "center",
+      header: (
+        <Text size="medium" weight="bold">
+          Deal Type
+        </Text>
+      ),
+      render: (datnum) => (
+        <Box align="center">
+          <Text
+            size="medium"
+            color={
+              datnum.dealType.toUpperCase() === "BUY"
+                ? "neutral-3"
+                : "neutral-4"
+            }
+          >
+            {datnum.dealType.toUpperCase()}
+          </Text>
         </Box>
       ),
     },
@@ -64,13 +99,19 @@ const createTableColumnDef = () => {
       size: "large",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Amount (Base Currency)
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.baseCurrencyAmount}</Text>
+          <Text size="medium">
+            {new Intl.NumberFormat("default", {
+              style: "currency",
+              currency: datnum.baseCurrency,
+              currencyDisplay: "symbol",
+            }).format(datnum.baseCurrencyAmount)}
+          </Text>
         </Box>
       ),
     },
@@ -78,13 +119,19 @@ const createTableColumnDef = () => {
       property: "counterCurrencyAmount",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Amount (Counter Currency)
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.counterCurrencyAmount}</Text>
+          <Text size="medium">
+            {new Intl.NumberFormat("default", {
+              style: "currency",
+              currency: datnum.counterCurrency,
+              currencyDisplay: "symbol",
+            }).format(datnum.counterCurrencyAmount)}
+          </Text>
         </Box>
       ),
     },
@@ -106,7 +153,7 @@ const ForexDealsHistoryTable = (props: Props) => {
 
   const columnDef = createTableColumnDef();
 
-  const convertedData = props.rates.map((item) => {
+  const convertedData = props.records.map((item) => {
     let currencyPair = item.baseCurrency + "/" + item.counterCurrency;
 
     return {
@@ -125,4 +172,4 @@ const ForexDealsHistoryTable = (props: Props) => {
   );
 };
 
-export default ForexRatesTable;
+export default ForexDealsHistoryTable;

@@ -10,6 +10,7 @@ import {
   Header,
   Anchor,
   Nav,
+  Grid,
 } from "grommet";
 import { Notification, FormClose, Grommet as GrommetIcon } from "grommet-icons";
 
@@ -89,7 +90,24 @@ function App() {
               </AppBar> */}
               <AppHeader />
 
-              <Box direction="row" flex overflow={{ horizontal: "hidden" }}>
+              {/* <Grid
+                fill
+                columns={["xsmall", "auto", "xsmall"]}
+                areas={[["left-margin", "content", "right-margin"]]}
+              >
+                <Box background="brand" gridArea="left-margin" /> */}
+              <Box
+                gridArea="content"
+                direction="row"
+                flex
+                overflow={{ horizontal: "hidden" }}
+                margin={{
+                  left: "xlarge",
+                  right: "xlarge",
+                  top: "small",
+                  bottom: "small",
+                }}
+              >
                 <Switch>
                   <Route exact={true} path="/" component={ForexRates} />
                   <Route exact={true} path="/rates" component={ForexRates} />
@@ -115,6 +133,8 @@ function App() {
                   />
                 </Switch>
               </Box>
+              {/* <Box gridArea="right-margin" />
+              </Grid> */}
             </Box>
           )}
         </ResponsiveContext.Consumer>

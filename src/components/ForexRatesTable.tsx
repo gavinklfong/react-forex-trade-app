@@ -25,25 +25,25 @@ const createTableColumnDef = (history: any) => {
       sortable: true,
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Instrument
-        </Heading>
+        </Text>
       ),
       primary: true,
-      render: (datnum) => <Text size="xlarge">{datnum.currencyPair}</Text>,
+      render: (datnum) => <Text size="medium">{datnum.currencyPair}</Text>,
     },
     {
       property: "buyRate",
       size: "large",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Buy Rate
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.buyRate}</Text>
+          <Text size="medium">{datnum.buyRate}</Text>
         </Box>
       ),
     },
@@ -68,13 +68,13 @@ const createTableColumnDef = (history: any) => {
       size: "large",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Sell Rate
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.sellRate}</Text>
+          <Text size="medium">{datnum.sellRate}</Text>
         </Box>
       ),
     },
@@ -98,13 +98,13 @@ const createTableColumnDef = (history: any) => {
       property: "spread",
       align: "center",
       header: (
-        <Heading size="medium" level="3">
+        <Text size="medium" weight="bold">
           Spread
-        </Heading>
+        </Text>
       ),
       render: (datnum) => (
         <Box align="center">
-          <Text size="xlarge">{datnum.spread}</Text>
+          <Text size="medium">{datnum.spread}</Text>
         </Box>
       ),
     },
