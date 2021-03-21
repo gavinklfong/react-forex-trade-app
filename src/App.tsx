@@ -11,6 +11,7 @@ import {
   Anchor,
   Nav,
   Grid,
+  Text,
 } from "grommet";
 import { Notification, FormClose, Grommet as GrommetIcon } from "grommet-icons";
 
@@ -43,11 +44,9 @@ const AppBar = (props: any) => (
 
 const AppHeader = (props: any) => (
   <Header background="brand" pad="medium">
-    <Anchor
-      href="https://tools.grommet.io/"
-      icon={<GrommetIcon color="brand" />}
-      label="Forex Trading Service"
-    />
+    <Anchor href="#">
+      <Text size="large">Forex Trading Service</Text>
+    </Anchor>
     <Box justify="end" direction="row" gap="medium">
       <Nav direction="row">
         <RouterAnchor as={Link} label="Rates" path="/rates" />
@@ -79,35 +78,14 @@ function App() {
         <ResponsiveContext.Consumer>
           {(size) => (
             <Box fill>
-              {/* <AppBar>
-                <Heading level="3" margin="none">
-                  My App
-                </Heading>
-                <Button
-                  icon={<Notification />}
-                  onClick={() => setShowSidebar(!showSidebar)}
-                />
-              </AppBar> */}
               <AppHeader />
 
-              {/* <Grid
+              <Grid
                 fill
                 columns={["xsmall", "auto", "xsmall"]}
                 areas={[["left-margin", "content", "right-margin"]]}
               >
-                <Box background="brand" gridArea="left-margin" /> */}
-              <Box
-                gridArea="content"
-                direction="row"
-                flex
-                overflow={{ horizontal: "hidden" }}
-                margin={{
-                  left: "xlarge",
-                  right: "xlarge",
-                  top: "small",
-                  bottom: "small",
-                }}
-              >
+                <Box gridArea="left-margin" />
                 <Switch>
                   <Route exact={true} path="/" component={ForexRates} />
                   <Route exact={true} path="/rates" component={ForexRates} />
@@ -132,9 +110,8 @@ function App() {
                     component={ForexDealDone}
                   />
                 </Switch>
-              </Box>
-              {/* <Box gridArea="right-margin" />
-              </Grid> */}
+                <Box gridArea="right-margin" />
+              </Grid>
             </Box>
           )}
         </ResponsiveContext.Consumer>

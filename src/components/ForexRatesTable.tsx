@@ -34,7 +34,7 @@ const createTableColumnDef = (history: any) => {
     },
     {
       property: "buyRate",
-      size: "large",
+      size: "medium",
       align: "center",
       header: (
         <Text size="medium" weight="bold">
@@ -65,7 +65,7 @@ const createTableColumnDef = (history: any) => {
     },
     {
       property: "sellRate",
-      size: "large",
+      size: "medium",
       align: "center",
       header: (
         <Text size="medium" weight="bold">
@@ -97,6 +97,7 @@ const createTableColumnDef = (history: any) => {
     {
       property: "spread",
       align: "center",
+      size: "large",
       header: (
         <Text size="medium" weight="bold">
           Spread
