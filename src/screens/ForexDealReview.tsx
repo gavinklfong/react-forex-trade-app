@@ -11,11 +11,13 @@ import {
   grommet,
   ThemeContext,
   Clock,
+  Layer,
 } from "grommet";
 
 import AmountInputField from "../components/AmountInputField";
 import { useHistory } from "react-router";
 import { deepMerge } from "grommet/utils";
+import ForexRateExpiryDialog from "../components/ForexRateExpiryDialog";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -34,9 +36,14 @@ const customTheme = deepMerge(grommet, {
 const ForexDealReview = (props: any) => {
   const [countDownStyle, setCountDownStyle] = useState("accent-2");
 
+  const [showDialog, setShowDialog] = useState(false);
+
+  const [countDownTime, setCountDownTime] = useState("PT0H0M05S");
+
   const countDownOnChange = (time: string) => {
     if (time === "P0H0M0S") {
       setCountDownStyle("status-critical");
+      setShowDialog(true);
     } else {
       setCountDownStyle("accent-2");
     }
@@ -45,7 +52,17 @@ const ForexDealReview = (props: any) => {
   const history = useHistory();
 
   const cancel = () => {
+    setShowDialog(false);
     history.push("/rates");
+  };
+
+  const refreshRate = () => {
+    setCountDownTime("PT0H0M00S");
+    setTimeout(() => {
+      setCountDownTime("PT0H0M05S");
+      setCountDownStyle("accent-2");
+      setShowDialog(false);
+    }, 500);
   };
 
   const submit = () => {
@@ -76,7 +93,7 @@ const ForexDealReview = (props: any) => {
                   <Text color={countDownStyle}>
                     <Clock
                       type="digital"
-                      time="PT0H0M05S"
+                      time={countDownTime}
                       run="backward"
                       onChange={(time: any) => {
                         console.log(time);
@@ -104,6 +121,11 @@ const ForexDealReview = (props: any) => {
             </Box>
           </Form>
         </ThemeContext.Extend>
+        {showDialog && (
+          <Layer position="center">
+            <ForexRateExpiryDialog confirm={refreshRate} cancel={cancel} />
+          </Layer>
+        )}
       </Box>
     </Box>
   );
