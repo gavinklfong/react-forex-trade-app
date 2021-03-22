@@ -1,7 +1,12 @@
+import { Box, Text } from "grommet";
 import React from "react";
 
 const LoadingDialog = (props: any) => {
-  return <p>LoadingDialog</p>;
+  return (
+    <Box pad="medium" width="small">
+      <Text>Loading...</Text>
+    </Box>
+  );
 };
 
 export default LoadingDialog;

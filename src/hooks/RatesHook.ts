@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchForexRates } from "../actions/forexRateActions";
+import {
+  fetchBaseCurrencies,
+  fetchForexRates,
+} from "../actions/forexRateActions";
 import { RootState } from "../reducers/rootStore";
 import { ForexService } from "../services/ForexService";
 
@@ -14,6 +17,7 @@ export const useRates = () => {
   );
 
   useEffect(() => {
+    dispatch(fetchBaseCurrencies());
     dispatch(fetchForexRates(baseCurrency));
   }, []);
 };

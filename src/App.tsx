@@ -25,6 +25,9 @@ import ForexDealHistory from "./screens/ForexDealHistory";
 import ForexDealInput from "./screens/ForexDealInput";
 import ForexDealReview from "./screens/ForexDealReview";
 import ForexDealDone from "./screens/ForexDealDone";
+import { RootState } from "./reducers/rootStore";
+import { useSelector } from "react-redux";
+import LoadingDialog from "./components/LoadingDialog";
 
 // const history = createBrowserHistory();
 
@@ -72,6 +75,8 @@ const theme = {
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const isLoading = useSelector((state: RootState) => state.uiState.isLoading);
+
   return (
     <Router>
       <Grommet theme={theme} full themeMode="dark">
@@ -83,6 +88,7 @@ function App() {
               <Grid
                 fill
                 columns={["xsmall", "auto", "xsmall"]}
+                rows={["auto"]}
                 areas={[["left-margin", "content", "right-margin"]]}
               >
                 <Box gridArea="left-margin" />
@@ -112,6 +118,11 @@ function App() {
                 </Switch>
                 <Box gridArea="right-margin" />
               </Grid>
+              {isLoading && (
+                <Layer position="center">
+                  <LoadingDialog />
+                </Layer>
+              )}
             </Box>
           )}
         </ResponsiveContext.Consumer>

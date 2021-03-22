@@ -32,6 +32,18 @@ export const fetchForexRatesSuccess = createAction(
   })
 );
 
+export const fetchBaseCurrenciesPending = createAction(
+  FOREX_RATE_ACTION_TYPE.FETCH_FOREX_BASE_CURRENCIES_PENDING
+);
+export const fetchBaseCurrenciesSuccess = createAction(
+  FOREX_RATE_ACTION_TYPE.FETCH_FOREX_BASE_CURRENCIES_SUCCESS,
+  (baseCurrencies: string[]) => ({
+    payload: {
+      baseCurrencies: baseCurrencies,
+    },
+  })
+);
+
 const forexService = new ForexService();
 
 export const bookForexRate = (req: ForexRateBookingReq) => {
@@ -47,5 +59,13 @@ export const fetchForexRates = (baseCurrency: string) => {
     dispatch(fetchForexRatesPending());
     const forexRates = await forexService.fetchRates(baseCurrency);
     dispatch(fetchForexRatesSuccess(forexRates));
+  };
+};
+
+export const fetchBaseCurrencies = () => {
+  return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
+    dispatch(fetchBaseCurrenciesPending());
+    const baseCurrencies = await forexService.fetchBaseCurrency();
+    dispatch(fetchBaseCurrenciesSuccess(baseCurrencies));
   };
 };

@@ -175,6 +175,8 @@ const FOREX_DEAL: ForexDeal = {
   dealRef: "AABBCC1122",
 };
 
+const BASE_CURRENCY: string[] = ["GBP", "USD", "CAD", "JPY", "HKD", "CNY"];
+
 export class ForexService {
   async fetchRates(baseCurrency: string): Promise<ForexRate[]> {
     return await Promise.resolve(FOREX_RATES);
@@ -193,5 +195,9 @@ export class ForexService {
 
   async submitDeal(req: ForexDealReq): Promise<ForexDeal> {
     return await Promise.resolve(FOREX_DEAL);
+  }
+
+  async fetchBaseCurrency(): Promise<string[]> {
+    return await Promise.resolve(BASE_CURRENCY);
   }
 }
