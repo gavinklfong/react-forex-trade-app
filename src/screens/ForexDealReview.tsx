@@ -18,6 +18,8 @@ import AmountInputField from "../components/AmountInputField";
 import { useHistory } from "react-router";
 import { deepMerge } from "grommet/utils";
 import ForexRateExpiryDialog from "../components/ForexRateExpiryDialog";
+import { useSelector } from "react-redux";
+import { RootState } from "../reducers/rootStore";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -33,7 +35,13 @@ const customTheme = deepMerge(grommet, {
   },
 });
 
+const rateFormatter = Intl.NumberFormat("default", {
+  maximumFractionDigits: 4,
+});
+
 const ForexDealReview = (props: any) => {
+  const dealReq = useSelector((state: RootState) => state.forex.dealReq);
+
   const [countDownStyle, setCountDownStyle] = useState("accent-2");
 
   const [showDialog, setShowDialog] = useState(false);
@@ -77,12 +85,16 @@ const ForexDealReview = (props: any) => {
         </Heading>
         <ThemeContext.Extend value={customTheme}>
           <Form onSubmit={submit}>
-            <FormField name="baseCurrencyAmount" label="Amount (GBP)" pad>
-              <Text size="xl">100</Text>
+            <FormField
+              name="baseCurrencyAmount"
+              label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
+              pad
+            >
+              <Text size="xl">{dealReq?.baseCurrencyAmount}</Text>
             </FormField>
             <FormField name="rate" label="Exchange Rate (Reserved)" pad>
               <Box direction="row" gap="xlarge">
-                <Text size="xl">1.7940</Text>
+                <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
                 <Box direction="row" gap="medium">
                   <Text color={countDownStyle} size="xl">
                     (
@@ -107,8 +119,12 @@ const ForexDealReview = (props: any) => {
                 </Box>
               </Box>
             </FormField>
-            <FormField name="counterCurrencyAmount" label="Amount (USD)" pad>
-              <Text size="xl">179.40</Text>
+            <FormField
+              name="counterCurrencyAmount"
+              label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
+              pad
+            >
+              <Text size="xl">{dealReq?.counterCurrencyAmount}</Text>
             </FormField>
             <Box
               direction="row"

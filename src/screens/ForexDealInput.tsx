@@ -75,7 +75,7 @@ const ForexDealInput = (props: any) => {
           <Form onSubmit={submit}>
             <FormField
               name="baseCurrencyAmount"
-              label="Amount (GBP)"
+              label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
               pad
               required
             >
@@ -87,7 +87,11 @@ const ForexDealInput = (props: any) => {
             <FormField name="rate" label="Exchange Rate (Indicative)" pad>
               <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
             </FormField>
-            <FormField name="counterCurrencyAmount" label="Amount (USD)" pad>
+            <FormField
+              name="counterCurrencyAmount"
+              label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
+              pad
+            >
               <Text size="xl">{dealReq?.counterCurrencyAmount}</Text>
             </FormField>
             <Box
