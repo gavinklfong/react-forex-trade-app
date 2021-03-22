@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { addMonths } from "date-fns";
 import ForexDealsHistoryTable from "../components/ForexDealsHistoryTable";
 import { useDeals } from "../hooks/RatesHook";
+import { ForexDeal } from "../models/ForexDeal";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -44,7 +45,8 @@ const ForexDealHistory = (props: any) => {
     setFromDate(e.value);
   };
 
-  const deals = useDeals(new Date(), new Date());
+  // const deals = useDeals(new Date(), new Date());
+  const deals = new Array<ForexDeal>();
 
   return (
     <Box direction="column" margin={{ top: "medium" }}>

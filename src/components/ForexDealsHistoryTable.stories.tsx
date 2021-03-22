@@ -16,6 +16,7 @@ const DATA: ForexDeal[] = [
     dealType: "buy",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 170,
+    dealRef: "GBP-001",
   },
   {
     timestamp: new Date(),
@@ -25,15 +26,17 @@ const DATA: ForexDeal[] = [
     dealType: "buy",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 102,
+    dealRef: "GBP-002",
   },
   {
     timestamp: new Date(),
     baseCurrency: "GBP",
     counterCurrency: "HKD",
     rate: 10.7,
-    dealType: "buy",
+    dealType: "sell",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 1070,
+    dealRef: "GBP-003",
   },
 ];
 

@@ -1,5 +1,10 @@
-import { ForexDeal } from "../models/ForexDeal";
+import { ForexDeal, ForexDealReq } from "../models/ForexDeal";
 import { ForexRate } from "../models/ForexRate";
+import {
+  ForexRateBooking,
+  ForexRateBookingReq,
+} from "../models/ForexRateBooking";
+import { addSeconds } from "date-fns";
 
 const FOREX_RATES: ForexRate[] = [
   {
@@ -125,6 +130,7 @@ const FOREX_DEALS: ForexDeal[] = [
     dealType: "buy",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 170,
+    dealRef: "GBP-001",
   },
   {
     timestamp: new Date(),
@@ -134,6 +140,7 @@ const FOREX_DEALS: ForexDeal[] = [
     dealType: "buy",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 102,
+    dealRef: "GBP-002",
   },
   {
     timestamp: new Date(),
@@ -143,15 +150,48 @@ const FOREX_DEALS: ForexDeal[] = [
     dealType: "sell",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 1070,
+    dealRef: "GBP-003",
   },
 ];
 
+const FOREX_RATE_BOOKING: ForexRateBooking = {
+  baseCurrency: "GBP",
+  counterCurrency: "USD",
+  rate: 1.3,
+  baseCurrencyAmount: 1000,
+  bookingRef: "ABCD1234",
+  dealType: "buy",
+  expiryTime: addSeconds(new Date(), 30),
+};
+
+const FOREX_DEAL: ForexDeal = {
+  timestamp: new Date(),
+  baseCurrency: "GBP",
+  counterCurrency: "USD",
+  rate: 1.3,
+  dealType: "buy",
+  baseCurrencyAmount: 1000,
+  counterCurrencyAmount: 1300,
+  dealRef: "AABBCC1122",
+};
+
 export class ForexService {
-  fetchRates(baseCurrency: string): ForexRate[] {
-    return FOREX_RATES;
+  async fetchRates(baseCurrency: string): Promise<ForexRate[]> {
+    return await Promise.resolve(FOREX_RATES);
   }
 
-  fetchDeals(startDate: Date, endDate: Date = new Date()): ForexDeal[] {
-    return FOREX_DEALS;
+  async fetchDeals(
+    startDate: Date,
+    endDate: Date = new Date()
+  ): Promise<ForexDeal[]> {
+    return await Promise.resolve(FOREX_DEALS);
+  }
+
+  async bookRate(req: ForexRateBookingReq): Promise<ForexRateBooking> {
+    return await Promise.resolve(FOREX_RATE_BOOKING);
+  }
+
+  async submitDeal(req: ForexDealReq): Promise<ForexDeal> {
+    return await Promise.resolve(FOREX_DEAL);
   }
 }
