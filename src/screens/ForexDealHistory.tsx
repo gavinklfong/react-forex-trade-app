@@ -13,6 +13,8 @@ import { addMonths } from "date-fns";
 import ForexDealsHistoryTable from "../components/ForexDealsHistoryTable";
 import { useDeals } from "../hooks/RatesHook";
 import { ForexDeal } from "../models/ForexDeal";
+import { useSelector } from "react-redux";
+import { RootState } from "../reducers/rootStore";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -31,22 +33,17 @@ const customTheme = deepMerge(grommet, {
 const dateFormat = Intl.DateTimeFormat(undefined, { dateStyle: "medium" });
 
 const ForexDealHistory = (props: any) => {
-  let now = new Date();
-  let previous3Month = addMonths(now, -3);
+  const { toDate, setToDate, fromDate, setFromDate } = useDeals();
 
-  const [toDate, setToDate] = useState(now.toISOString());
-  const [fromDate, setFromDate] = useState(previous3Month.toISOString());
+  const deals = useSelector((state: RootState) => state.forex.dealHistory);
 
   const toDateOnChange = (e: any) => {
-    setToDate(e.value);
+    setToDate(new Date(e.value));
   };
 
   const fromDateOnChange = (e: any) => {
-    setFromDate(e.value);
+    setFromDate(new Date(e.value));
   };
-
-  // const deals = useDeals(new Date(), new Date());
-  const deals = new Array<ForexDeal>();
 
   return (
     <Box direction="column" margin={{ top: "medium" }}>
@@ -54,7 +51,7 @@ const ForexDealHistory = (props: any) => {
         <Box width="xlarge" direction="row" gap="small">
           <FormField label="From Date">
             <DateInput
-              value={fromDate}
+              value={fromDate.toISOString()}
               buttonProps={{
                 label: `${dateFormat.format(new Date(fromDate))}`,
               }}
@@ -63,7 +60,7 @@ const ForexDealHistory = (props: any) => {
           </FormField>
           <FormField label="To Date">
             <DateInput
-              value={toDate}
+              value={toDate.toISOString()}
               buttonProps={{
                 label: `${dateFormat.format(new Date(toDate))}`,
               }}

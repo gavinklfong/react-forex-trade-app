@@ -16,10 +16,14 @@ const customTheme = deepMerge(grommet, {
   },
 });
 
+const onChange = (input: number) => {
+  console.log(input);
+};
+
 export const Default = () => (
   <Grommet theme={customTheme}>
     <Box align="center" pad="large">
-      <AmountInputField />
+      <AmountInputField value={0} onChange={onChange} />
     </Box>
   </Grommet>
 );

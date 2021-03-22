@@ -6,19 +6,26 @@ import { ColumnConfig } from "grommet/components/DataTable";
 import { ForexRate } from "../models/ForexRate";
 import { useHistory } from "react-router";
 
+type toDealInputFn = (
+  baseCurrency: string,
+  counterCurrency: string,
+  dealType: string
+) => void;
 export interface Props {
   rates: ForexRate[];
-  // createDeal: (baseCurrency: string, counterCurrency: string) => void;
+  tradeButtonOnClick: toDealInputFn;
 }
 
 interface RowType {
   currencyPair: string;
+  baseCurrency: string;
+  counterCurrency: string;
   buyRate: number;
   sellRate: number;
   spread: number;
 }
 
-const createTableColumnDef = (history: any) => {
+const createTableColumnDef = (toDealInput: toDealInputFn) => {
   const columns: ColumnConfig<RowType>[] = [
     {
       property: "currencyPair",
@@ -58,7 +65,8 @@ const createTableColumnDef = (history: any) => {
           label="Buy"
           onClick={() => {
             console.log(datnum);
-            history.push("/deal/input");
+            // history.push("/deal/input");
+            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "buy");
           }}
         />
       ),
@@ -89,7 +97,8 @@ const createTableColumnDef = (history: any) => {
           label="Sell"
           onClick={() => {
             console.log(datnum);
-            history.push("/deal/input");
+            // history.push("/deal/input");
+            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "sell");
           }}
         />
       ),
@@ -125,9 +134,9 @@ const ForexRatesTable = (props: Props) => {
     direction: "desc",
   });
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  const columnDef = createTableColumnDef(history);
+  const columnDef = createTableColumnDef(props.tradeButtonOnClick);
 
   const convertedData = props.rates.map((item) => {
     let currencyPair = item.baseCurrency + "/" + item.counterCurrency;

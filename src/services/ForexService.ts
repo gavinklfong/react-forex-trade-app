@@ -182,6 +182,24 @@ export class ForexService {
     return await Promise.resolve(FOREX_RATES);
   }
 
+  async fetchRate(
+    baseCurrency: string,
+    counterCurrency: string
+  ): Promise<ForexRate> {
+    const spread = 0.002;
+    const buyRate = Math.random();
+    const sellRate = buyRate - spread;
+
+    return await Promise.resolve({
+      timestamp: new Date(),
+      baseCurrency: baseCurrency,
+      counterCurrency: counterCurrency,
+      buyRate: buyRate,
+      sellRate: sellRate,
+      spread: spread,
+    });
+  }
+
   async fetchDeals(
     startDate: Date,
     endDate: Date = new Date()

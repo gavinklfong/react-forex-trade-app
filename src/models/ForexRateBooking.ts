@@ -1,7 +1,7 @@
 export interface ForexRateBookingReq {
   baseCurrency: string;
   counterCurrency: string;
-  dealType: "buy" | "sell";
+  dealType: string;
   baseCurrencyAmount: number;
 }
 

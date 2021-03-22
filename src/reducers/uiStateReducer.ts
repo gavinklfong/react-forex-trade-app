@@ -1,5 +1,9 @@
 import { createReducer, createSlice } from "@reduxjs/toolkit";
 import {
+  fetchForexDealsPending,
+  fetchForexDealsSuccess,
+} from "../actions/forexDealActions";
+import {
   fetchForexRatesPending,
   fetchForexRatesSuccess,
 } from "../actions/forexRateActions";
@@ -19,6 +23,14 @@ export const uiStateReducer = createReducer(initialStore, (builder) =>
       isLoading: true,
     }))
     .addCase(fetchForexRatesSuccess, (state, action) => ({
+      ...state,
+      isLoading: false,
+    }))
+    .addCase(fetchForexDealsPending, (state, action) => ({
+      ...state,
+      isLoading: true,
+    }))
+    .addCase(fetchForexDealsSuccess, (state, action) => ({
       ...state,
       isLoading: false,
     }))

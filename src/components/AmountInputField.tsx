@@ -2,10 +2,19 @@ import { Box, Button, TextInput, Grid, Text } from "grommet";
 import { Add, Subtract } from "grommet-icons";
 import React from "react";
 
-const AmountInputField = (props: any) => (
+interface Props {
+  value: number | undefined;
+  onChange: (text: number) => void;
+}
+
+const AmountInputField = (props: Props) => (
   <Box direction="row" gap="xsmall">
     <Box>
-      <TextInput name="AmountInput" />
+      <TextInput
+        name="AmountInput"
+        value={props.value}
+        onChange={(e: any) => props.onChange(+e.target.value)}
+      />
     </Box>
     <Button primary icon={<Add />}></Button>
     <Button primary icon={<Subtract />}></Button>

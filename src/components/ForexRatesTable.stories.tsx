@@ -34,7 +34,11 @@ const DATA: ForexRate[] = [
   },
 ];
 
-const createDeal = (baseCurrency: string, counterCurrency: string) => {
+const createDeal = (
+  baseCurrency: string,
+  counterCurrency: string,
+  dealType: string
+) => {
   console.log(
     "create deal - base currency = " +
       baseCurrency +
@@ -46,7 +50,7 @@ const createDeal = (baseCurrency: string, counterCurrency: string) => {
 export const Default = () => (
   <Grommet theme={grommet}>
     <Box align="center" pad="large">
-      <ForexRatesTable rates={DATA} />
+      <ForexRatesTable rates={DATA} tradeButtonOnClick={createDeal} />
     </Box>
   </Grommet>
 );

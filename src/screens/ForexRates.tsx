@@ -2,7 +2,12 @@ import { Box, Form, FormField, TextInput, Text, Select } from "grommet";
 import { Search } from "grommet-icons";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchForexRates } from "../actions/forexRateActions";
+import { useHistory } from "react-router-dom";
+import { createForexDeal } from "../actions/forexDealActions";
+import {
+  fetchForexRates,
+  selectBaseCurrency,
+} from "../actions/forexRateActions";
 import ForexRatesTable from "../components/ForexRatesTable";
 
 import { useRates } from "../hooks/RatesHook";
@@ -22,19 +27,47 @@ const getRegExp = (text: string) => {
 
 const ForexRates = (props: any) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useRates();
 
   const rates = useSelector((state: RootState) => state.forex.rates);
+  const selectedBaseCurrency = useSelector(
+    (state: RootState) => state.forex.baseCurrency
+  );
   const defaultBaseCurrencies = useSelector(
     (state: RootState) => state.forex.baseCurrencies
   );
 
-  const [selectedBaseCurrency, setSelectedBaseCurrency] = useState(["GBP"]);
-
   const [baseCurrencyOptions, setBaseCurrencyOptions] = useState(
     defaultBaseCurrencies
   );
+
+  const gotoDealInputScreen = (
+    baseCurrency: string,
+    counterCurrency: string,
+    dealType: string
+  ) => {
+    // dispatch(createForexDeal(baseCurrency, counterCurrency, dealType));
+
+    const params =
+      encodeURIComponent("baseCurrency") +
+      "=" +
+      encodeURIComponent(baseCurrency) +
+      "&" +
+      encodeURIComponent("counterCurrency") +
+      "=" +
+      encodeURIComponent(counterCurrency) +
+      "&" +
+      encodeURIComponent("dealType") +
+      "=" +
+      encodeURIComponent(dealType);
+
+    history.push({
+      pathname: "/deal/input",
+      search: params,
+    });
+  };
 
   return (
     <Box direction="column" gap="medium" margin={{ top: "medium" }}>
@@ -49,9 +82,8 @@ const ForexRates = (props: any) => {
           options={baseCurrencyOptions}
           value={[selectedBaseCurrency]}
           size="medium"
-          onChange={({ nextValue }) => {
-            setSelectedBaseCurrency(nextValue);
-            dispatch(fetchForexRates(nextValue));
+          onChange={({ value: nextValue }) => {
+            dispatch(selectBaseCurrency(nextValue));
           }}
           closeOnChange={true}
           onClose={() => setBaseCurrencyOptions(defaultBaseCurrencies)}
@@ -66,7 +98,10 @@ const ForexRates = (props: any) => {
         />
       </Box>
       <Box>
-        <ForexRatesTable rates={rates} />
+        <ForexRatesTable
+          rates={rates}
+          tradeButtonOnClick={gotoDealInputScreen}
+        />
       </Box>
     </Box>
   );

@@ -44,6 +44,15 @@ export const fetchBaseCurrenciesSuccess = createAction(
   })
 );
 
+export const selectBaseCurrency = createAction(
+  FOREX_RATE_ACTION_TYPE.SELECT_BASE_CURRENCY,
+  (baseCurrency: string) => ({
+    payload: {
+      baseCurrency: baseCurrency,
+    },
+  })
+);
+
 const forexService = new ForexService();
 
 export const bookForexRate = (req: ForexRateBookingReq) => {

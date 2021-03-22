@@ -15,6 +15,10 @@ import {
 import AmountInputField from "../components/AmountInputField";
 import { useHistory } from "react-router";
 import { deepMerge } from "grommet/utils";
+import { useDealInput } from "../hooks/RatesHook";
+import { RootState } from "../reducers/rootStore";
+import { useDispatch, useSelector } from "react-redux";
+import { updateForexDealAmount } from "../actions/forexDealActions";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -30,7 +34,27 @@ const customTheme = deepMerge(grommet, {
   },
 });
 
+const rateFormatter = Intl.NumberFormat("default", {
+  maximumFractionDigits: 4,
+});
+
 const ForexDealInput = (props: any) => {
+  const dispatch = useDispatch();
+
+  useDealInput();
+
+  const dealReq = useSelector((state: RootState) => state.forex.dealReq);
+
+  const updateBaseCurrencyAmount = (amount: number) => {
+    let rate = 0;
+    if (dealReq != null && dealReq.rate != null) {
+      rate = dealReq.rate;
+    }
+
+    const counterCurrencyAmount = amount * rate;
+    dispatch(updateForexDealAmount(amount, counterCurrencyAmount));
+  };
+
   const history = useHistory();
 
   const cancel = () => {
@@ -55,13 +79,16 @@ const ForexDealInput = (props: any) => {
               pad
               required
             >
-              <AmountInputField />
+              <AmountInputField
+                value={dealReq?.baseCurrencyAmount}
+                onChange={updateBaseCurrencyAmount}
+              />
             </FormField>
             <FormField name="rate" label="Exchange Rate (Indicative)" pad>
-              <Text size="xl">1.7940</Text>
+              <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
             </FormField>
             <FormField name="counterCurrencyAmount" label="Amount (USD)" pad>
-              <Text size="xl">179.40</Text>
+              <Text size="xl">{dealReq?.counterCurrencyAmount}</Text>
             </FormField>
             <Box
               direction="row"
