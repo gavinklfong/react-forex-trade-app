@@ -4,6 +4,8 @@
 
 This repository was created with the aim of demonstrating the use of React JS & Grommet.
 
+This application so far is a static prototype, meaning that all data is static for solely purpose to demonstrate UI compnent and screen flow. Hence, there is no state management or any integration with backend API.
+
 The application consists the following screens:
 
 - Forex Rate Display Screen
