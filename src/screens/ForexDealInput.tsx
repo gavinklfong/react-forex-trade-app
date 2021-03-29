@@ -19,6 +19,8 @@ import { useDealInput } from "../hooks/RatesHook";
 import { RootState } from "../reducers/rootStore";
 import { useDispatch, useSelector } from "react-redux";
 import { updateForexDealAmount } from "../actions/forexDealActions";
+import { rateFormatter, currencyFormatter } from "../utils/formatter";
+import { bookForexRate } from "../actions/forexRateActions";
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -32,10 +34,6 @@ const customTheme = deepMerge(grommet, {
       position: "none",
     },
   },
-});
-
-const rateFormatter = Intl.NumberFormat("default", {
-  maximumFractionDigits: 4,
 });
 
 const ForexDealInput = (props: any) => {
@@ -62,6 +60,14 @@ const ForexDealInput = (props: any) => {
   };
 
   const submit = () => {
+    const bookingReq = {
+      baseCurrency: dealReq?.baseCurrency || "",
+      counterCurrency: dealReq?.counterCurrency || "",
+      dealType: dealReq?.dealType || "",
+      baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
+    };
+
+    dispatch(bookForexRate(bookingReq));
     history.push("/deal/review");
   };
 
@@ -92,7 +98,12 @@ const ForexDealInput = (props: any) => {
               label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
               pad
             >
-              <Text size="xl">{dealReq?.counterCurrencyAmount}</Text>
+              <Text size="xl">
+                {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
+              </Text>
+            </FormField>
+            <FormField name="dealType" label="Deal Type" pad>
+              <Text size="xl">{(dealReq?.dealType || "").toUpperCase()}</Text>
             </FormField>
             <Box
               direction="row"

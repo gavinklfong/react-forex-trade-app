@@ -2,6 +2,8 @@ import { createReducer, createSlice } from "@reduxjs/toolkit";
 import { ForexRate } from "../models/ForexRate";
 import { ForexDeal, ForexDealReq } from "../models/ForexDeal";
 import {
+  bookForexRate,
+  bookForexRateSuccess,
   fetchBaseCurrenciesSuccess,
   fetchForexRatesSuccess,
   selectBaseCurrency,
@@ -11,12 +13,14 @@ import {
   fetchForexDealsSuccess,
   updateForexDealAmount,
 } from "../actions/forexDealActions";
+import { ForexRateBooking } from "../models/ForexRateBooking";
 
 interface ForexStore {
   rates: ForexRate[];
   dealHistory: ForexDeal[];
   baseCurrencies: string[];
   dealReq?: ForexDealReq;
+  rateBooking?: ForexRateBooking;
   baseCurrency: string;
 }
 
@@ -89,6 +93,28 @@ const updateForexDealAmountReducer = (
   };
 };
 
+const bookForexRateReducer = (
+  state: ForexStore,
+  action: ReturnType<typeof bookForexRateSuccess>
+) => {
+  const dealReq = {
+    ...state.dealReq,
+    dealType: state.dealReq?.dealType || "",
+    baseCurrency: state.dealReq?.baseCurrency || "",
+    counterCurrency: state.dealReq?.counterCurrency || "",
+    baseCurrencyAmount: state.dealReq?.baseCurrencyAmount,
+    counterCurrencyAmount: state.dealReq?.counterCurrencyAmount,
+    bookingRef: action.payload.booking.bookingRef,
+    rate: action.payload.booking.rate,
+  };
+
+  return {
+    ...state,
+    dealReq: dealReq,
+    rateBooking: action.payload.booking,
+  };
+};
+
 const initialStore: ForexStore = {
   rates: new Array<ForexRate>(),
   dealHistory: new Array<ForexDeal>(),
@@ -103,4 +129,5 @@ export const forexReducer = createReducer(initialStore, (builder) =>
     .addCase(selectBaseCurrency, selectBaseCurrencyReducer)
     .addCase(createForexDealSuccess, createForexDealReducer)
     .addCase(updateForexDealAmount, updateForexDealAmountReducer)
+    .addCase(bookForexRateSuccess, bookForexRateReducer)
 );

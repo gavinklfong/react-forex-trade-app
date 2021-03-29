@@ -187,7 +187,7 @@ export class ForexService {
     counterCurrency: string
   ): Promise<ForexRate> {
     const spread = 0.002;
-    const buyRate = Math.random();
+    const buyRate = 1 + Math.random();
     const sellRate = buyRate - spread;
 
     return await Promise.resolve({
@@ -208,7 +208,20 @@ export class ForexService {
   }
 
   async bookRate(req: ForexRateBookingReq): Promise<ForexRateBooking> {
-    return await Promise.resolve(FOREX_RATE_BOOKING);
+    const expiryTime = addSeconds(new Date(), 10);
+    console.log("bookRate - expiryTime = " + expiryTime);
+
+    const rateBooking: ForexRateBooking = {
+      baseCurrency: req.baseCurrency,
+      counterCurrency: req.counterCurrency,
+      dealType: req.dealType,
+      baseCurrencyAmount: req.baseCurrencyAmount,
+      rate: 1 + Math.random(),
+      bookingRef: Math.random().toString(36).substr(2, 5),
+      expiryTime: expiryTime,
+    };
+
+    return await Promise.resolve(rateBooking);
   }
 
   async submitDeal(req: ForexDealReq): Promise<ForexDeal> {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Heading,
   Box,
@@ -17,9 +17,19 @@ import {
 import AmountInputField from "../components/AmountInputField";
 import { useHistory } from "react-router";
 import { deepMerge } from "grommet/utils";
+import { addSeconds, sub } from "date-fns";
 import ForexRateExpiryDialog from "../components/ForexRateExpiryDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../reducers/rootStore";
+
+import { rateFormatter, currencyFormatter } from "../utils/formatter";
+import { bookForexRate } from "../actions/forexRateActions";
+import CountDownTimer from "../components/CountDownTImer";
+
+const dateTimeFormatter = Intl.DateTimeFormat("default", {
+  dateStyle: "short",
+  timeStyle: "long",
+});
 
 const customTheme = deepMerge(grommet, {
   formField: {
@@ -35,27 +45,24 @@ const customTheme = deepMerge(grommet, {
   },
 });
 
-const rateFormatter = Intl.NumberFormat("default", {
-  maximumFractionDigits: 4,
-});
-
 const ForexDealReview = (props: any) => {
-  const dealReq = useSelector((state: RootState) => state.forex.dealReq);
+  const dispatch = useDispatch();
 
-  const [countDownStyle, setCountDownStyle] = useState("accent-2");
+  const dealReq = useSelector((state: RootState) => state.forex.dealReq);
+  const rateBooking = useSelector(
+    (state: RootState) => state.forex.rateBooking
+  );
 
   const [showDialog, setShowDialog] = useState(false);
 
-  const [countDownTime, setCountDownTime] = useState("PT0H0M05S");
+  const expiryTime = rateBooking?.expiryTime;
 
-  const countDownOnChange = (time: string) => {
-    if (time === "P0H0M0S") {
-      setCountDownStyle("status-critical");
-      setShowDialog(true);
-    } else {
-      setCountDownStyle("accent-2");
-    }
-  };
+  console.log("rate expiry time = " + dateTimeFormatter.format(expiryTime));
+
+  const [countDownTime, setCountDownTime] = useState(expiryTime);
+  useEffect(() => {
+    setCountDownTime(expiryTime);
+  }, [expiryTime]);
 
   const history = useHistory();
 
@@ -65,12 +72,29 @@ const ForexDealReview = (props: any) => {
   };
 
   const refreshRate = () => {
-    setCountDownTime("PT0H0M00S");
+    // setCountDownTime("PT0H0M00S");
+    // setTimeout(() => {
+    //   setCountDownTime("PT0H0M05S");
+    //   setCountDownStyle("accent-2");
+    //   setShowDialog(false);
+    // }, 500);
+
+    const bookingReq = {
+      baseCurrency: dealReq?.baseCurrency || "",
+      counterCurrency: dealReq?.counterCurrency || "",
+      dealType: dealReq?.dealType || "",
+      baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
+    };
+
+    setCountDownTime(addSeconds(new Date(), 5));
     setTimeout(() => {
-      setCountDownTime("PT0H0M05S");
-      setCountDownStyle("accent-2");
+      dispatch(bookForexRate(bookingReq));
       setShowDialog(false);
     }, 500);
+  };
+
+  const onTimeUp = () => {
+    setShowDialog(true);
   };
 
   const submit = () => {
@@ -90,33 +114,19 @@ const ForexDealReview = (props: any) => {
               label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
               pad
             >
-              <Text size="xl">{dealReq?.baseCurrencyAmount}</Text>
+              <Text size="xl">
+                {currencyFormatter.format(dealReq?.baseCurrencyAmount || 0)}
+              </Text>
             </FormField>
             <FormField name="rate" label="Exchange Rate (Reserved)" pad>
               <Box direction="row" gap="xlarge">
                 <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
-                <Box direction="row" gap="medium">
-                  <Text color={countDownStyle} size="xl">
-                    (
-                  </Text>
-                  <Text color={countDownStyle} size="xl">
-                    Valid By:{" "}
-                  </Text>
-                  <Text color={countDownStyle}>
-                    <Clock
-                      type="digital"
-                      time={countDownTime}
-                      run="backward"
-                      onChange={(time: any) => {
-                        console.log(time);
-                        countDownOnChange(time);
-                      }}
-                    />
-                  </Text>
-                  <Text color={countDownStyle} size="xl">
-                    )
-                  </Text>
-                </Box>
+                {countDownTime && (
+                  <CountDownTimer
+                    targetTime={countDownTime}
+                    onTimeup={onTimeUp}
+                  />
+                )}
               </Box>
             </FormField>
             <FormField
@@ -124,7 +134,9 @@ const ForexDealReview = (props: any) => {
               label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
               pad
             >
-              <Text size="xl">{dealReq?.counterCurrencyAmount}</Text>
+              <Text size="xl">
+                {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
+              </Text>
             </FormField>
             <Box
               direction="row"
