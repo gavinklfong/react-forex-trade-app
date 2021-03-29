@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Heading,
   Box,
@@ -23,6 +23,8 @@ import { rateFormatter, currencyFormatter } from "../utils/formatter";
 import { bookForexRate } from "../actions/forexRateActions";
 
 const ForexDealInput = (props: any) => {
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const dispatch = useDispatch();
 
   useDealInput();
@@ -46,15 +48,17 @@ const ForexDealInput = (props: any) => {
   };
 
   const submit = () => {
-    const bookingReq = {
-      baseCurrency: dealReq?.baseCurrency || "",
-      counterCurrency: dealReq?.counterCurrency || "",
-      dealType: dealReq?.dealType || "",
-      baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
-    };
+    if (isFormValid) {
+      const bookingReq = {
+        baseCurrency: dealReq?.baseCurrency || "",
+        counterCurrency: dealReq?.counterCurrency || "",
+        dealType: dealReq?.dealType || "",
+        baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
+      };
 
-    dispatch(bookForexRate(bookingReq));
-    history.push("/deal/review");
+      dispatch(bookForexRate(bookingReq));
+      history.push("/deal/review");
+    }
   };
 
   return (
@@ -63,14 +67,33 @@ const ForexDealInput = (props: any) => {
         <Heading size="small" level="1" alignSelf="center">
           Create Deal
         </Heading>
-        <Form onSubmit={submit}>
+        <Form
+          onSubmit={submit}
+          validate="blur"
+          onValidate={(results) => {
+            setIsFormValid(true);
+            console.log(results);
+            const errorKeys = Object.keys(results.errors);
+            for (let i = 0; i < errorKeys.length; i++) {
+              if (results.errors[errorKeys[i]] !== undefined) {
+                setIsFormValid(false);
+              }
+            }
+          }}
+        >
           <FormField
             name="baseCurrencyAmount"
             label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
             pad
-            required
+            validate={[
+              (value) => {
+                if (value === undefined || value < 100)
+                  return "Amount must be at least 100";
+              },
+            ]}
           >
             <AmountInputField
+              name="baseCurrencyAmount"
               value={dealReq?.baseCurrencyAmount}
               onChange={updateBaseCurrencyAmount}
             />

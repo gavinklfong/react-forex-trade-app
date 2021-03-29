@@ -23,7 +23,7 @@ const onChange = (input: number) => {
 export const Default = () => (
   <Grommet theme={customTheme}>
     <Box align="center" pad="large">
-      <AmountInputField value={0} onChange={onChange} />
+      <AmountInputField name={"AmountInput"} value={0} onChange={onChange} />
     </Box>
   </Grommet>
 );
