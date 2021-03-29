@@ -70,6 +70,17 @@ const theme = {
       height: "20px",
     },
   },
+  formField: {
+    label: {
+      margin: { left: "0" },
+      requiredIndicator: true,
+      size: "medium",
+      weight: 500,
+    },
+    border: {
+      position: "none",
+    },
+  },
 };
 
 function App() {

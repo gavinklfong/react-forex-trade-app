@@ -31,20 +31,6 @@ const dateTimeFormatter = Intl.DateTimeFormat("default", {
   timeStyle: "long",
 });
 
-const customTheme = deepMerge(grommet, {
-  formField: {
-    label: {
-      margin: { left: "0" },
-      requiredIndicator: true,
-      size: "medium",
-      weight: 500,
-    },
-    border: {
-      position: "none",
-    },
-  },
-});
-
 const ForexDealReview = (props: any) => {
   const dispatch = useDispatch();
 
@@ -72,13 +58,6 @@ const ForexDealReview = (props: any) => {
   };
 
   const refreshRate = () => {
-    // setCountDownTime("PT0H0M00S");
-    // setTimeout(() => {
-    //   setCountDownTime("PT0H0M05S");
-    //   setCountDownStyle("accent-2");
-    //   setShowDialog(false);
-    // }, 500);
-
     const bookingReq = {
       baseCurrency: dealReq?.baseCurrency || "",
       counterCurrency: dealReq?.counterCurrency || "",
@@ -107,48 +86,48 @@ const ForexDealReview = (props: any) => {
         <Heading size="small" level="1" alignSelf="center">
           Review Deal
         </Heading>
-        <ThemeContext.Extend value={customTheme}>
-          <Form onSubmit={submit}>
-            <FormField
-              name="baseCurrencyAmount"
-              label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
-              pad
-            >
-              <Text size="xl">
-                {currencyFormatter.format(dealReq?.baseCurrencyAmount || 0)}
-              </Text>
-            </FormField>
-            <FormField name="rate" label="Exchange Rate (Reserved)" pad>
-              <Box direction="row" gap="xlarge">
-                <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
-                {countDownTime && (
-                  <CountDownTimer
-                    targetTime={countDownTime}
-                    onTimeup={onTimeUp}
-                  />
-                )}
-              </Box>
-            </FormField>
-            <FormField
-              name="counterCurrencyAmount"
-              label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
-              pad
-            >
-              <Text size="xl">
-                {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
-              </Text>
-            </FormField>
-            <Box
-              direction="row"
-              justify="start"
-              gap="medium"
-              margin={{ top: "medium" }}
-            >
-              <Button type="submit" label="Confirm" primary onClick={submit} />
-              <Button label="Cancel" onClick={cancel} />
+
+        <Form onSubmit={submit}>
+          <FormField
+            name="baseCurrencyAmount"
+            label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
+            pad
+          >
+            <Text size="xl">
+              {currencyFormatter.format(dealReq?.baseCurrencyAmount || 0)}
+            </Text>
+          </FormField>
+          <FormField name="rate" label="Exchange Rate (Reserved)" pad>
+            <Box direction="row" gap="xlarge">
+              <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
+              {countDownTime && (
+                <CountDownTimer
+                  targetTime={countDownTime}
+                  onTimeup={onTimeUp}
+                />
+              )}
             </Box>
-          </Form>
-        </ThemeContext.Extend>
+          </FormField>
+          <FormField
+            name="counterCurrencyAmount"
+            label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
+            pad
+          >
+            <Text size="xl">
+              {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
+            </Text>
+          </FormField>
+          <Box
+            direction="row"
+            justify="start"
+            gap="medium"
+            margin={{ top: "medium" }}
+          >
+            <Button type="submit" label="Confirm" primary onClick={submit} />
+            <Button label="Cancel" onClick={cancel} />
+          </Box>
+        </Form>
+
         {showDialog && (
           <Layer position="center">
             <ForexRateExpiryDialog confirm={refreshRate} cancel={cancel} />

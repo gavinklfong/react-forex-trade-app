@@ -16,20 +16,6 @@ import { ForexDeal } from "../models/ForexDeal";
 import { useSelector } from "react-redux";
 import { RootState } from "../reducers/rootStore";
 
-const customTheme = deepMerge(grommet, {
-  formField: {
-    label: {
-      margin: { left: "0" },
-      requiredIndicator: true,
-      size: "small",
-      weight: 500,
-    },
-    border: {
-      position: "none",
-    },
-  },
-});
-
 const dateFormat = Intl.DateTimeFormat(undefined, { dateStyle: "medium" });
 
 const ForexDealHistory = (props: any) => {
@@ -47,28 +33,26 @@ const ForexDealHistory = (props: any) => {
 
   return (
     <Box direction="column" margin={{ top: "medium" }}>
-      <ThemeContext.Extend value={customTheme}>
-        <Box width="xlarge" direction="row" gap="small">
-          <FormField label="From Date">
-            <DateInput
-              value={fromDate.toISOString()}
-              buttonProps={{
-                label: `${dateFormat.format(new Date(fromDate))}`,
-              }}
-              onChange={fromDateOnChange}
-            />
-          </FormField>
-          <FormField label="To Date">
-            <DateInput
-              value={toDate.toISOString()}
-              buttonProps={{
-                label: `${dateFormat.format(new Date(toDate))}`,
-              }}
-              onChange={toDateOnChange}
-            />
-          </FormField>
-        </Box>
-      </ThemeContext.Extend>
+      <Box width="xlarge" direction="row" gap="small">
+        <FormField label="From Date">
+          <DateInput
+            value={fromDate.toISOString()}
+            buttonProps={{
+              label: `${dateFormat.format(new Date(fromDate))}`,
+            }}
+            onChange={fromDateOnChange}
+          />
+        </FormField>
+        <FormField label="To Date">
+          <DateInput
+            value={toDate.toISOString()}
+            buttonProps={{
+              label: `${dateFormat.format(new Date(toDate))}`,
+            }}
+            onChange={toDateOnChange}
+          />
+        </FormField>
+      </Box>
       <Box>
         <ForexDealsHistoryTable records={deals} />
       </Box>

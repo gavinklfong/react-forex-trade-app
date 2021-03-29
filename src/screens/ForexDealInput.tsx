@@ -22,20 +22,6 @@ import { updateForexDealAmount } from "../actions/forexDealActions";
 import { rateFormatter, currencyFormatter } from "../utils/formatter";
 import { bookForexRate } from "../actions/forexRateActions";
 
-const customTheme = deepMerge(grommet, {
-  formField: {
-    label: {
-      margin: { left: "0" },
-      requiredIndicator: true,
-      size: "medium",
-      weight: 500,
-    },
-    border: {
-      position: "none",
-    },
-  },
-});
-
 const ForexDealInput = (props: any) => {
   const dispatch = useDispatch();
 
@@ -77,45 +63,43 @@ const ForexDealInput = (props: any) => {
         <Heading size="small" level="1" alignSelf="center">
           Create Deal
         </Heading>
-        <ThemeContext.Extend value={customTheme}>
-          <Form onSubmit={submit}>
-            <FormField
-              name="baseCurrencyAmount"
-              label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
-              pad
-              required
-            >
-              <AmountInputField
-                value={dealReq?.baseCurrencyAmount}
-                onChange={updateBaseCurrencyAmount}
-              />
-            </FormField>
-            <FormField name="rate" label="Exchange Rate (Indicative)" pad>
-              <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
-            </FormField>
-            <FormField
-              name="counterCurrencyAmount"
-              label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
-              pad
-            >
-              <Text size="xl">
-                {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
-              </Text>
-            </FormField>
-            <FormField name="dealType" label="Deal Type" pad>
-              <Text size="xl">{(dealReq?.dealType || "").toUpperCase()}</Text>
-            </FormField>
-            <Box
-              direction="row"
-              justify="start"
-              gap="medium"
-              margin={{ top: "medium" }}
-            >
-              <Button type="submit" label="Next" primary onClick={submit} />
-              <Button label="Cancel" onClick={cancel} />
-            </Box>
-          </Form>
-        </ThemeContext.Extend>
+        <Form onSubmit={submit}>
+          <FormField
+            name="baseCurrencyAmount"
+            label={<Text>Amount ({dealReq?.baseCurrency})</Text>}
+            pad
+            required
+          >
+            <AmountInputField
+              value={dealReq?.baseCurrencyAmount}
+              onChange={updateBaseCurrencyAmount}
+            />
+          </FormField>
+          <FormField name="rate" label="Exchange Rate (Indicative)" pad>
+            <Text size="xl">{rateFormatter.format(dealReq?.rate!)}</Text>
+          </FormField>
+          <FormField
+            name="counterCurrencyAmount"
+            label={<Text>Amount ({dealReq?.counterCurrency})</Text>}
+            pad
+          >
+            <Text size="xl">
+              {currencyFormatter.format(dealReq?.counterCurrencyAmount || 0)}
+            </Text>
+          </FormField>
+          <FormField name="dealType" label="Deal Type" pad>
+            <Text size="xl">{(dealReq?.dealType || "").toUpperCase()}</Text>
+          </FormField>
+          <Box
+            direction="row"
+            justify="start"
+            gap="medium"
+            margin={{ top: "medium" }}
+          >
+            <Button type="submit" label="Next" primary onClick={submit} />
+            <Button label="Cancel" onClick={cancel} />
+          </Box>
+        </Form>
       </Box>
     </Box>
   );
