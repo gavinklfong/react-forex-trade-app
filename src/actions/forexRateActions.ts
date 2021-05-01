@@ -66,6 +66,7 @@ export const bookForexRate = (req: ForexRateBookingReq) => {
 export const fetchForexRates = (baseCurrency: string) => {
   return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
     dispatch(fetchForexRatesPending());
+
     const forexRates = await forexService.fetchRates(baseCurrency);
     dispatch(fetchForexRatesSuccess(forexRates));
   };

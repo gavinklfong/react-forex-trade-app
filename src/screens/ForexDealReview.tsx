@@ -39,6 +39,10 @@ const ForexDealReview = (props: any) => {
     (state: RootState) => state.forex.rateBooking
   );
 
+  const customerId = useSelector(
+    (state: RootState) => state.userSession.customerId
+  );
+
   const [showDialog, setShowDialog] = useState(false);
 
   const expiryTime = rateBooking?.expiryTime;
@@ -61,8 +65,9 @@ const ForexDealReview = (props: any) => {
     const bookingReq = {
       baseCurrency: dealReq?.baseCurrency || "",
       counterCurrency: dealReq?.counterCurrency || "",
-      dealType: dealReq?.dealType || "",
+      tradeAction: dealReq?.tradeAction || "",
       baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
+      customerId: customerId,
     };
 
     setCountDownTime(addSeconds(new Date(), 5));

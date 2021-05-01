@@ -1,11 +1,12 @@
 export interface ForexDealReq {
   baseCurrency: string;
   counterCurrency: string;
-  dealType: string;
+  tradeAction: string;
   rate?: number;
   baseCurrencyAmount?: number;
   counterCurrencyAmount?: number;
   rateBookingRef?: string;
+  customerId: number;
 }
 export interface ForexDeal {
   timestamp: Date;

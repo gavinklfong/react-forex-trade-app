@@ -48,7 +48,9 @@ export const useDeals = () => {
 export const useDealInput = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-
+  const customerId = useSelector(
+    (state: RootState) => state.userSession.customerId
+  );
   // const [dealReq, setDealReq] = useState<ForexDealReq>({
   //   baseCurrency: params.baseCurrency,
   //   counterCurrency: params.counterCurrency,
@@ -75,15 +77,16 @@ export const useDealInput = () => {
     const params = new URLSearchParams(location.search);
 
     // TODO: define a type for deal type instead of getting buy / sell everywhere
-    let dealType: string = "buy";
-    if (params.get("dealType") != null && params.get("dealType") === "sell")
-      dealType = "sell";
+    let dealType: string = "BUY";
+    if (params.get("dealType") != null && params.get("dealType") === "SELL")
+      dealType = "SELL";
 
     dispatch(
       createForexDeal(
         params.get("baseCurrency")!,
         params.get("counterCurrency")!,
-        dealType
+        dealType,
+        customerId
       )
     );
   }, [dispatch, location]);

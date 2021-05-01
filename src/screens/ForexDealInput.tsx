@@ -30,6 +30,9 @@ const ForexDealInput = (props: any) => {
   useDealInput();
 
   const dealReq = useSelector((state: RootState) => state.forex.dealReq);
+  const customerId = useSelector(
+    (state: RootState) => state.userSession.customerId
+  );
 
   const updateBaseCurrencyAmount = (amount: number) => {
     let rate = 0;
@@ -52,8 +55,9 @@ const ForexDealInput = (props: any) => {
       const bookingReq = {
         baseCurrency: dealReq?.baseCurrency || "",
         counterCurrency: dealReq?.counterCurrency || "",
-        dealType: dealReq?.dealType || "",
+        tradeAction: dealReq?.tradeAction || "",
         baseCurrencyAmount: dealReq?.baseCurrencyAmount || 0,
+        customerId: customerId,
       };
 
       dispatch(bookForexRate(bookingReq));
@@ -111,7 +115,7 @@ const ForexDealInput = (props: any) => {
             </Text>
           </FormField>
           <FormField name="dealType" label="Deal Type" pad>
-            <Text size="xl">{(dealReq?.dealType || "").toUpperCase()}</Text>
+            <Text size="xl">{(dealReq?.tradeAction || "").toUpperCase()}</Text>
           </FormField>
           <Box
             direction="row"

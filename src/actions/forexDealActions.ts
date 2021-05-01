@@ -59,19 +59,21 @@ const forexService = new ForexService();
 export const createForexDeal = (
   baseCurrency: string,
   counterCurrency: string,
-  dealType: string
+  dealType: string,
+  customerId: number
 ) => {
   return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
     dispatch(createForexDealPending());
     let forexRate = await forexService.fetchRate(baseCurrency, counterCurrency);
-    let rate = dealType === "buy" ? forexRate.buyRate : forexRate.sellRate;
+    let rate = dealType === "BUY" ? forexRate.buyRate : forexRate.sellRate;
     let deal = {
       baseCurrency: baseCurrency,
       counterCurrency: counterCurrency,
-      dealType: dealType,
+      tradeAction: dealType,
       rate: rate,
       baseCurrencyAmount: 0,
       counterCurrencyAmount: 0,
+      customerId: customerId,
     };
     dispatch(createForexDealSuccess(deal));
   };

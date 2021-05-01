@@ -74,13 +74,15 @@ const createForexDealReducer = (
   };
 };
 
+// TODO: need a better way to deal with optional value
 const updateForexDealAmountReducer = (
   state: ForexStore,
   action: ReturnType<typeof updateForexDealAmount>
 ) => {
   const dealReq = {
     ...state.dealReq,
-    dealType: state.dealReq?.dealType || "",
+    customerId: state.dealReq?.customerId || 1,
+    tradeAction: state.dealReq?.tradeAction || "",
     baseCurrency: state.dealReq?.baseCurrency || "",
     counterCurrency: state.dealReq?.counterCurrency || "",
     baseCurrencyAmount: action.payload.baseCurrencyAmount,
@@ -93,13 +95,15 @@ const updateForexDealAmountReducer = (
   };
 };
 
+// TODO: need a better way to deal with optional value
 const bookForexRateReducer = (
   state: ForexStore,
   action: ReturnType<typeof bookForexRateSuccess>
 ) => {
   const dealReq = {
     ...state.dealReq,
-    dealType: state.dealReq?.dealType || "",
+    customerId: state.dealReq?.customerId || 1,
+    tradeAction: state.dealReq?.tradeAction || "",
     baseCurrency: state.dealReq?.baseCurrency || "",
     counterCurrency: state.dealReq?.counterCurrency || "",
     baseCurrencyAmount: state.dealReq?.baseCurrencyAmount,

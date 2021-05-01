@@ -70,5 +70,8 @@
     "redux-devtools": "^3.7.0",
     "storybook-addon-paddings": "^4.0.0",
     "storybook-react-router": "^1.0.8"
+  },
+  "app": {
+    "forex-api-url": "http://localhost:8080"
   }
 }

@@ -4,7 +4,8 @@ import {
   ForexRateBooking,
   ForexRateBookingReq,
 } from "../models/ForexRateBooking";
-import { addSeconds } from "date-fns";
+import { addSeconds, parseISO } from "date-fns";
+import packageInfo from "../../package.json";
 
 const FOREX_RATES: ForexRate[] = [
   {
@@ -127,7 +128,7 @@ const FOREX_DEALS: ForexDeal[] = [
     baseCurrency: "GBP",
     counterCurrency: "USD",
     rate: 1.7,
-    dealType: "buy",
+    dealType: "BUY",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 170,
     dealRef: "GBP-001",
@@ -137,7 +138,7 @@ const FOREX_DEALS: ForexDeal[] = [
     baseCurrency: "GBP",
     counterCurrency: "CAD",
     rate: 1.02,
-    dealType: "buy",
+    dealType: "BUY",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 102,
     dealRef: "GBP-002",
@@ -147,7 +148,7 @@ const FOREX_DEALS: ForexDeal[] = [
     baseCurrency: "GBP",
     counterCurrency: "HKD",
     rate: 10.7,
-    dealType: "sell",
+    dealType: "SELL",
     baseCurrencyAmount: 100,
     counterCurrencyAmount: 1070,
     dealRef: "GBP-003",
@@ -160,8 +161,9 @@ const FOREX_RATE_BOOKING: ForexRateBooking = {
   rate: 1.3,
   baseCurrencyAmount: 1000,
   bookingRef: "ABCD1234",
-  dealType: "buy",
+  tradeAction: "BUY",
   expiryTime: addSeconds(new Date(), 30),
+  customerId: 1,
 };
 
 const FOREX_DEAL: ForexDeal = {
@@ -169,7 +171,7 @@ const FOREX_DEAL: ForexDeal = {
   baseCurrency: "GBP",
   counterCurrency: "USD",
   rate: 1.3,
-  dealType: "buy",
+  dealType: "BUY",
   baseCurrencyAmount: 1000,
   counterCurrencyAmount: 1300,
   dealRef: "AABBCC1122",
@@ -179,53 +181,68 @@ const BASE_CURRENCY: string[] = ["GBP", "USD", "CAD", "JPY", "HKD", "CNY"];
 
 export class ForexService {
   async fetchRates(baseCurrency: string): Promise<ForexRate[]> {
-    return await Promise.resolve(FOREX_RATES);
+    const url =
+      packageInfo.app["forex-api-url"] + "/rates/latest/" + baseCurrency;
+    console.log("retreving from " + url);
+
+    return fetch(url).then((resp) => resp.json());
   }
 
   async fetchRate(
     baseCurrency: string,
     counterCurrency: string
   ): Promise<ForexRate> {
-    const spread = 0.002;
-    const buyRate = 1 + Math.random();
-    const sellRate = buyRate - spread;
+    const url =
+      packageInfo.app["forex-api-url"] +
+      "/rates/latest/" +
+      baseCurrency +
+      "/" +
+      counterCurrency;
+    console.log("retreving from " + url);
 
-    return await Promise.resolve({
-      timestamp: new Date(),
-      baseCurrency: baseCurrency,
-      counterCurrency: counterCurrency,
-      buyRate: buyRate,
-      sellRate: sellRate,
-      spread: spread,
-    });
+    return fetch(url).then((resp) => resp.json());
   }
 
   async fetchDeals(
     startDate: Date,
     endDate: Date = new Date()
   ): Promise<ForexDeal[]> {
-    return await Promise.resolve(FOREX_DEALS);
+    const url = packageInfo.app["forex-api-url"] + "/deals";
+    console.log("retreving from " + url);
+
+    return fetch(url).then((resp) => resp.json());
+
+    // return await Promise.resolve(FOREX_DEALS);
   }
 
   async bookRate(req: ForexRateBookingReq): Promise<ForexRateBooking> {
-    const expiryTime = addSeconds(new Date(), 10);
-    console.log("bookRate - expiryTime = " + expiryTime);
+    const url = packageInfo.app["forex-api-url"] + "/rates/book";
+    console.log("POST to " + url);
 
-    const rateBooking: ForexRateBooking = {
-      baseCurrency: req.baseCurrency,
-      counterCurrency: req.counterCurrency,
-      dealType: req.dealType,
-      baseCurrencyAmount: req.baseCurrencyAmount,
-      rate: 1 + Math.random(),
-      bookingRef: Math.random().toString(36).substr(2, 5),
-      expiryTime: expiryTime,
-    };
+    console.log(req);
 
-    return await Promise.resolve(rateBooking);
+    return fetch(url, {
+      method: "POST",
+      body: JSON.stringify(req),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        return { ...json, expiryTime: parseISO(json.expiryTime) };
+      });
   }
 
   async submitDeal(req: ForexDealReq): Promise<ForexDeal> {
-    return await Promise.resolve(FOREX_DEAL);
+    const url = packageInfo.app["forex-api-url"] + "/deals";
+    console.log("POST to " + url);
+
+    return fetch(url, {
+      method: "POST",
+      body: JSON.stringify(req),
+      headers: { "Content-type": "application/json; charset=UTF-8" },
+    }).then((resp) => resp.json());
+
+    // return await Promise.resolve(FOREX_DEAL);
   }
 
   async fetchBaseCurrency(): Promise<string[]> {

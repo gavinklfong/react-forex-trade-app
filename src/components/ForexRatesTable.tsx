@@ -66,7 +66,7 @@ const createTableColumnDef = (toDealInput: toDealInputFn) => {
           onClick={() => {
             console.log(datnum);
             // history.push("/deal/input");
-            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "buy");
+            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "BUY");
           }}
         />
       ),
@@ -98,7 +98,7 @@ const createTableColumnDef = (toDealInput: toDealInputFn) => {
           onClick={() => {
             console.log(datnum);
             // history.push("/deal/input");
-            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "sell");
+            toDealInput(datnum.baseCurrency, datnum.counterCurrency, "SELL");
           }}
         />
       ),
